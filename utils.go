@@ -166,7 +166,16 @@ func print_proxies(logger *CondLogger, extVer, country string, proxy_type string
 	fmt.Println("Password:", password)
 	fmt.Println("Proxy-Authorization:",
 		basic_auth_header(login, password))
-	fmt.Println("")
+	fmt.Println("------------")
+	if maValues, ok := tunnels.Ztun["ma"]; ok {
+		for _, ma := range maValues {
+				fmt.Println(ma)
+		}
+	} else {
+			fmt.Println("No 'ma' values found in Ztun")
+	}
+	fmt.Println("------------")
+
 	wr.Write([]string{"host", "ip_address", "direct", "peer", "hola", "trial", "trial_peer", "vendor"})
 	for host, ip := range tunnels.IPList {
 		if PROTOCOL_WHITELIST[tunnels.Protocol[host]] {
@@ -177,6 +186,7 @@ func print_proxies(logger *CondLogger, extVer, country string, proxy_type string
 				strconv.FormatUint(uint64(tunnels.Port.Hola), 10),
 				strconv.FormatUint(uint64(tunnels.Port.Trial), 10),
 				strconv.FormatUint(uint64(tunnels.Port.TrialPeer), 10),
+
 				tunnels.Vendor[host]})
 		}
 	}
